@@ -13,7 +13,7 @@ provider "aws" {
 
 
 resource "aws_instance" "ec2_instance-1" {
-  ami = "ami-024e6efaf93d85776"
+  ami = "ami-0e820afa569e84cc1"
   instance_type = "t2.micro"
   tags = {
     Name = "lokiinstance"
