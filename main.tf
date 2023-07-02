@@ -16,7 +16,7 @@ resource "aws_vpc" "vpc-ec2" {
 
 resource "aws_subnet" "jenkins_subnet" {
   vpc_id = aws_vpc.vpc-ec2.id
-  cidrBlock = aws_vpc.vpc-ec2.cidr_block
+  cidr_block = aws_vpc.vpc-ec2.cidr_block
 }
 
 resource "aws_key_pair" "ssh-key-pair" {
