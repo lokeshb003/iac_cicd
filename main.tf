@@ -11,7 +11,7 @@ provider "aws" {
   region = "us-east-1"
 }
 resource "aws_vpc" "vpc-ec2" {
-  cidr_block = "10.5.5.0/16"
+  cidr_block = "10.5.5.0/24"
 }
 
 resource "aws_subnet" "jenkins_subnet" {
