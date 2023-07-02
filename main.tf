@@ -10,10 +10,17 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 }
+resource "tls_private_key" "pk" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
 
 resource "aws_key_pair" "ssh-key-pair" {
-  key_name = "ssh-key-pair-1"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDbtT16wurdu2V0JGbvx3nXM0RDf+e4FOxjqO/mJj4EVextBgY452N6r8npUpkKvCh0O9lHk1D/qk0f5tZ8QwyFZMAjfpQsSJiY+e8sSOpDRaJAqMooY4+IjdsLtHf65ci5EdN233kux+RAC45O1XzohPx+sfRD5UX/cqenZSHaO2PU2gVDPXQx+DARUxtx975cWtrOTyjlUI3mCOj1PzBrwnthCKCgr3xW3duLBiC40+Pot2aSMhMjMyCOLxaVPBjMbMW5W6SdLK1+K3jcRbqNvgAyZXEeJeRrdvBq6kfAQBUHjxHV12eDndgb1vjdRzjH7aZZT53smR9tjfEJR8g289UAUlbWSXBpqG7n0JBlEEGebLgBhcH88CFY8VGsV2W1SBGiXkZtZlgNAcQvn2YH4mj9sOQlvHc0ElEFSUi988qFR7nB98l8qdtFdNwISygI2ponXceOICW/9GJJe47PjLxsF/AG77B1UHWqbddQ+Nuuq1eCA3dTa3DD4Af6onA91TlbSwIaKzpZTe8oOwffcRHG9SO0imjmNryBwTp/qHvDRFe7iK9ruzJXYlZ4u0a0TyrXUnN890N1CU6pEYoouUHHqAkdrDs3JFwRENLcxR1vf9RMcdedHRf4FNqfCvh1jbRF3oLXg7lQ3KE6TvzFgVbL62vsEd+Qzu8uqMcyMQ== lokes@Lokesh"
+  key_name = "ssh-key"
+  public_key = tls_private_key.pk.public_key_openssh
+  provisioner "local-exec" {
+    command = "echo '${tls_private_key.pk.private_key_pem}' > ./privkey.pem"
+  }
 }
 
 resource "aws_instance" "ec2_instance-1" {
