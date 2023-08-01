@@ -29,13 +29,13 @@ resource "aws_instance" "ec2_instance-1" {
   user_data = <<-EOL
   #!/bin/bash -xe
 
-  apt update && apt install curl wget -y
-  curl -X POST https://circleci.com/api/v2/project/github/lokeshb003/Petclinic/pipeline --header "Circle-Token: CCIPAT_8Gav5rGKQGAbcZhCPexwdM_b959eea4d7a9c45aa888987221985010f84226fa" --header "content-type: application/json" --data '{"branch":"circleci-project-setup"}'
+  apt update && apt install curl openjdk-11-jdk wget -y
+  curl -X POST https://circleci.com/api/v2/project/github/lokeshb003/Petclinic/pipeline --header "Circle-Token: $CIRCLECI_TOKEN" --header "content-type: application/json" --data '{"branch":"circleci-project-setup"}'
   sleep 200s
-  cd /root && wget https://dlcdn.apache.org/tomcat/tomcat-11/v11.0.0-M9/bin/apache-tomcat-11.0.0-M9.tar.gz && mkdir /opt/tomcat && tar xvzf apache-tomcat-11.0.0-M9.tar.gz --strip-components 1 --directory /opt/tomcat
-  curl -u "lokeshbalaji2021@gmail.com:Reva@12345678" -L -O 'https://lokeshbalaji003.jfrog.io/artifactory/springboot-app-libs-snapshot/target/petclinic.war'
-  cp petclinic.war /opt/tomcat/webapps/
-  bash /opt/tomcat/bin/startup.sh
+  cd /root && wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.91/bin/apache-tomcat-8.5.91.tar.gz && mkdir /opt/tomcat && tar xvzf apache-tomcat-8.5.91.tar.gz --directory /opt/tomcat
+  curl -u "<uname>:<pass>" -L -O 'https://lokeshbalaji003.jfrog.io/artifactory/springboot-app-libs-snapshot/target/petclinic.war'
+  cp petclinic.war /opt/tomcat/apache-tomcat-8.5.91/webapps/
+  bash /opt/tomcat/apache-tomcat-8.5.91/bin/startup.sh
   EOL
 
   key_name = aws_key_pair.ssh-key-pair.key_name
