@@ -29,19 +29,19 @@ resource "aws_instance" "ec2_instance-1" {
   user_data = <<-EOL
   #!/bin/bash -xe
 
-  apt update && apt install curl -y
-  curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
-  echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-  sudo apt-get update
-  sudo apt-get install fontconfig openjdk-11-jre -y
-  sudo apt-get install jenkins -y
-  systemctl status jenkins
+  apt update && apt install curl wget -y
+  curl -X POST https://circleci.com/api/v2/project/github/lokeshb003/Petclinic/pipeline --header "Circle-Token: CCIPAT_8Gav5rGKQGAbcZhCPexwdM_b959eea4d7a9c45aa888987221985010f84226fa" --header "content-type: application/json" --data '{"branch":"circleci-project-setup"}'
+  sleep 200s
+  cd /root && wget https://dlcdn.apache.org/tomcat/tomcat-11/v11.0.0-M9/bin/apache-tomcat-11.0.0-M9.tar.gz && mkdir /opt/tomcat && tar xvzf apache-tomcat-11.0.0-M9.tar.gz --strip-components 1 --directory /opt/tomcat
+  curl -u "lokeshbalaji2021@gmail.com:Reva@12345678" -L -O 'https://lokeshbalaji003.jfrog.io/artifactory/springboot-app-libs-snapshot/target/petclinic.war'
+  cp petclinic.war /opt/tomcat/webapps/
+  bash /opt/tomcat/bin/startup.sh
   EOL
 
   key_name = aws_key_pair.ssh-key-pair.key_name
 
 
   tags = {
-    Name = "jenkins-instance"
+    Name = "tomcat-server"
   }
 }
